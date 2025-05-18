@@ -36,15 +36,15 @@ function ControlsPanel({
     && isSocketConnected  //socket is connected
     && message.trim() !== '';//message should not be empty
 
-    // console.log('canSend conditions:', {
-    //   isFinished,
-    //   startNode,
-    //   targetNode,
-    //   finalPathLength: finalPath.length,
-    //   finalPath,
-    //   isSocketConnected,
-    //   message: message.trim(),
-    // });
+    console.log('canSend conditions:', {
+      isFinished,
+      startNode,
+      targetNode,
+      finalPathLength: finalPath.length,
+      finalPath,
+      isSocketConnected,
+      message: message.trim(),
+    });
 
     setIsSendButtonDisabled(!canSend);
     
@@ -97,19 +97,18 @@ function ControlsPanel({
 
   return (
     <div className="controls-panel">
-      <h2>Controls Panel</h2>
+      <h2 className='text-center'>Controls Panel</h2>
 
       <div className="control-group">
         <label htmlFor="graph-type-select">Graph Type:</label>
         <select
           id="graph-type-select"
           onChange={(e) => {
-            console.log(e.target.value);
             setGraphType(e.target.value);
             setStartNode(null);
             setTargetNode(null);
           }}
-          disabled={isRunning || dijkstraState} //disable selection of node when algorithm is running...
+          disabled={isRunning || dijkstraState}
         >
           <option value="simple">Simple Graph</option>
           <option value="complex">Complex Graph</option>
@@ -121,12 +120,8 @@ function ControlsPanel({
         <select
           id="start-node-select"
           value={startNode ?? ''}
-          onChange={(e) =>{ 
-            //console.log(e.target.value);
-            setStartNode(parseInt(e.target.value) || null)
-          }
-          }
-          disabled={dijkstraState && !isFinished}///????
+          onChange={(e) => setStartNode(parseInt(e.target.value) || null)}
+          disabled={dijkstraState && !isFinished}
         >
           <option value="" disabled>
             Select Start Node

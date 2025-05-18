@@ -1,19 +1,19 @@
 /* General Styles */
 :root {
     /* Updated Color Palette (More Vibrant) */
-    --background: hsla(118, 81%, 35%, 0.507); /* Very Light Gray */
+    --background: hwb(118 7% 36% / 0.507); /* Very Light Gray */
     --foreground: hsl(0, 0%, 0%); /* Text Colours */
     --card-bg: hsl(0, 0%, 100%);/* background */
     --border-color: hsl(0, 0%, 0%); /* Border colour */
     --primary-fg: hsl(0, 86%, 37%); /* White */
-    --secondary-fg: hsl(219, 55%, 18%); /* Darker Slate Blue */
+    --secondary-fg: hsl(222, 59%, 54%); /* Darker Slate Blue */
     --accent-color: hsl(115, 97%, 34%); /* Inside Color of nodes */
     --exploring-color: hsl(45 100% 60%); /* Bright Yellow */
     --visited-color: hsl(210 20% 85%); /* Medium Light Gray */
     --path-color: hsl(160 70% 45%); /* Teal/Green for Path */
     --node-stroke-color: hsl(210 15% 75%); /* Medium Gray Border */
     --edge-stroke-color: hsl(210 15% 80%); /* Default Edge Color */
-    --message-send-color: hsl(200 80% 55%); /* Bright Blue for sending */
+    --message-send-color: hsl(200, 82%, 55%); /* Bright Blue for sending */
     --message-receive-color: hsl(160 70% 45%); /* Teal/Green for receiving */
     --error-color: hsl(0 70% 55%); /* Red for errors */
     --status-connected: hsl(130, 60%, 45%); /* Green for connected */
@@ -24,20 +24,16 @@
     /* --shadow-lg: 0 12px 24px rgb(207, 1, 1), 0 8px 8px rgba(110, 238, 25, 0.08); */
 }
 
-body {
-font-family: Arial, sans-serif;
+*{
     margin: 0;
     padding: 0;
-    background-color: pink;
-    color: black;
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
 }
-
+body{
+    background-color: black;
+}
 header {
-    background-color: var(--card-bg);
+    /* background-color: var(--card-bg); */
+    background-color: cadetblue;
     padding: 1rem 2rem;
     border-bottom: 1px solid var(--border-color);
     box-shadow: var(--shadow);
@@ -57,40 +53,24 @@ header p {
     font-size: 1rem;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    height: calc(100vh - 100px); /* Adjust for header height */
-    padding: 1rem;
-    gap: 1rem;
-    box-sizing: border-box;
-}
 
-@media (min-width: 768px) {
-    .container {
-        flex-direction: row;
-        padding: 1.5rem;
-        gap: 1.5rem;
-    }
+.container{
+    display:flex;
+    gap:1rem;
+    margin: 0.5rem;
 }
-
 /* Controls Panel */
 .controls-panel {
-    background-color: var(--card-bg);
+    background-color: white;
     padding: 1.5rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow);
+    border-radius: 1rem;
+    border: 1px solid black;
     width: 50px;
-    max-width: 470px;
+    max-width: 350px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    height: fit-content;
-    max-height: 100%; /* Fit within container */
-    overflow-y: auto; /* Scroll if content overflows */
+    gap: .25rem;
 }
 
 @media (min-width: 768px) {
@@ -101,64 +81,39 @@ header p {
 }
 
 .controls-panel h2 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: var(--primary-color);
+    text-align: center;
     font-size: 1.5rem;
     font-weight: 600;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 0.75rem;
-}
-
-.control-group {
-    display: flex;
-    flex-direction: row;
-    gap: 0.4rem;
-    font-weight: 600;
-    
+    border-bottom: 2px solid black;
+    padding-bottom: 0.5rem;
 }
 
 .control-group label {
     font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--foreground);
+    font-size: 1rem;
 }
 
 .control-group select,
 .control-group input[type="range"],
 .control-group input[type="text"] {
-    padding: 0.6rem;
-    border: 1px solid var(--border-color);
-    border-radius: calc(var(--radius) - 2px);
-    font-size: 0.9rem;
-    background-color: var(--background);
-    color: var(--foreground);
+    padding: 0.5rem;
+    margin-top:.5rem;
+    border: 2px solid black;
+    border-radius: .5rem;
+    font-size: .9rem;
+    background-color: rgba(31, 160, 31, 0.589);
     width: 100%;
     box-sizing: border-box;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    /* font-weight: */
 }
 
-.control-group select:focus,
-.control-group input[type="range"]:focus,
-.control-group input[type="text"]:focus {
-    outline: none;
-    border-color: var(--ring-color);
-    box-shadow: 0 0 0 3px hsla(var(--ring-color), 0.2);
-}
-
-.control-group small {
-    font-size: 0.75rem;
-    color: var(--muted-fg);
-    margin-top: 0.1rem;
-}
 
 /* Buttons */
 .control-buttons {
     display: flex;
     gap: 0.5rem;
     flex-wrap:wrap;
-    border-top: 1px solid var(--border-color);
+    margin-top:1rem;
+    border-top: 2px solid black;
     padding-top: 1rem;
     
 }
@@ -170,7 +125,7 @@ header p {
     gap: 0.5rem;
     color:black;
     padding: 0.6rem 1.1rem;
-    border-radius: 100px;
+    border-radius: 10px;
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
@@ -190,49 +145,48 @@ header p {
 .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    background-color: var(--secondary-color) !important;
-    color: var(--muted-fg) !important;
-    border-color: var(--border-color) !important;
+    background-color: red !important;
+    /* color: blue !important; */
+    border-color: black !important;
 }
 
 .btn:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring-color);
+    box-shadow: 0 0 0 2px green, 0 0 0 4px yellow;
 }
 
 .btn-primary {
-    background-color: pink;
-    color:black;
+    background-color:rgb(235, 86, 86);
+    font-weight: 600;
 }
 .btn-primary:hover:not(:disabled) {
-    background-color: hsl(var(--primary-color) / 0.9);
+    background-color: red;
 }
 
 .btn-secondary {
-    background-color: pink;
-    color: var(--secondary-fg);
+    background-color: white;
+    font-weight: 600;
 }
 .btn-secondary:hover:not(:disabled) {
-    background-color: hsl(var(--secondary-color) / 0.8);
+    background-color: rgb(160, 212, 160);
 }
 
 .btn-outline {
-    background-color: bl;
-    color: var(--foreground);
-    border: 1px solid var(--border-color);
+    background-color: powderblue;
+    font-weight: 600;
+    border: 2px solid black;
 }
 .btn-outline:hover:not(:disabled) {
-    background-color: hsl(var(--accent-color) / 0.1);
-    color: var(--accent-color);
-    border-color: hsl(var(--accent-color) / 0.5);
+    background-color: yellowgreen;
+    color: red;
+    border-color: black;
 }
 
 .btn-accent {
-    background-color: var(--accent-color);
-    color: var(--accent-fg);
+    background-color: rosybrown;
 }
 .btn-accent:hover:not(:disabled) {
-    background-color: hsl(var(--accent-color) / 0.9);
+    background-color: peachpuff;
 }
 
 /* Specific Button icons */
@@ -245,120 +199,88 @@ header p {
 
 /* Slider */
 input[type="range"] {
-     cursor: pointer; 
+    cursor: pointer; 
     appearance: none;
-    height: 6px;
-    background: var(--secondary-color);
-    border-radius: 3px;
+    height:0.5px;
+    background: white;
+    border-radius: 1px;
     outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
     appearance: none;
     width: 18px;
     height: 18px;
-    background: pink;
+    background:black;
     border-radius: 100%;
-    border: 3px solid rgba(0, 0, 0, 0.982);
-    /* box-shadow: var(--shadow); */
-    /* cursor: pointer; */
+    padding: .6rem;
+    border: 1px solid green;
     
 }
 input[type="range"]:hover::-webkit-slider-thumb {
-     background: var(--accent-color);
+     background:black;
 }
 input[type="range"]:active::-webkit-slider-thumb {
      transform: scale(1.1);
 }
-input[type="range"]::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    background: var(--primary-color);
-    border-radius: 50%;
-    border: 3px solid var(--card-bg);
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-input[type="range"]:hover::-moz-range-thumb {
-    background: yellow;
-}
-input[type="range"]:active::-moz-range-thumb {
-     transform: scale(1.1);
-}
+
 
 /* Status & Results */
 .status-info, .results-info, .messaging-section {
     padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 2px solid black;
 }
 
 .status-info h3, .results-info h3, .messaging-section h3 {
     margin: 0 0 0.75rem 0;
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--foreground);
 }
 
 .status-info p, .results-info p {
-    font-size: 0.9rem;
-    color: var(--muted-fg);
+    font-size: 1rem;
     margin: 0;
     min-height: 1.5em;
-}
-
-/* .results-info small {
-     font-size: 0.75rem;
-     color: var(--muted-fg);
-     display: red;
-     margin-top: 0.2rem;
-} */
-
-#result-distance {
-    color: black;
-    font-weight: bold;
 }
 
 /* Messaging Section Styles */
 .messaging-section {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
-    /* length: 2px; */
+    gap:.5rem;
 }
 
-/* #message-input {
-    width: 300px; /* Fixed width */
+#message-input{
+    padding: 0.5rem;
+    border-radius: .5rem;
+}
 
 
 #send-message-button {
-    /* Uses .btn and .btn-accent styles */
+    display: flex;
+    align-self: center;
     margin-top: 0.2rem;
-    
-    /* Add a border */
-    border: 2px solid #4CAF50; /* Change color and thickness as needed */
+    border: 2px solid rgb(145, 145, 194); /* Change color and thickness as needed */
     border-radius: 4px; /* Optional: Adds rounded corners */
 }
 
 
 .message-status-area p {
     font-size: 0.9rem;
-    color: var(--muted-fg);
     margin: 0.5rem 0 0 0;
 }
 #message-status {
     font-weight: 500;
-    color: var(--foreground);
 }
-#message-status.sending { color: var(--message-send-color); }
-#message-status.delivered { color: var(--message-receive-color); }
-#message-status.failed { color: var(--error-color); }
+#message-status.sending { color: skyblue; }
+#message-status.delivered { color:hsl(160 70% 45%); }
+#message-status.failed { color:  hsl(0 70% 55%); }
 
 /* Connection Status */
 .connection-status {
     font-size: 0.8rem;
-    color: var(--muted-fg);
+    /* color: var(--muted-fg); */
     padding-top: 1rem;
-    border-top: 1px dashed var(--border-color);
+    border-top: 2px dashed black;
     text-align: center;
 }
 #socket-status {
@@ -367,9 +289,9 @@ input[type="range"]:active::-moz-range-thumb {
     border-radius: 4px;
     color: white;
 }
-#socket-status.status-connected { background-color: var(--status-connected); }
-#socket-status.status-disconnected { background-color: var(--status-disconnected); }
-#socket-status.status-connecting { background-color: var(--status-connecting); }
+#socket-status.status-connected { background-color:hsl(130, 60%, 45%); }
+#socket-status.status-disconnected { background-color:  hsl(0, 60%, 50%); }
+#socket-status.status-connecting { background-color:  hsl(0, 100%, 33%); }
 
 /* Graph Visualization Area */
 .graph-container {
@@ -492,7 +414,8 @@ input[type="range"]:active::-moz-range-thumb {
 
 .node-circle.selected {
     /* Style handled by the selection ring */
-}
+    height: 0px;  /*remove it*/
+} */
 
 .node-circle.messaging-sender {
     stroke: rgb(51, 217, 51);
