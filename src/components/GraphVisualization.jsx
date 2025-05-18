@@ -47,7 +47,7 @@ function GraphVisualization({
   };
 
   // Log receivedMessages to debug popup rendering
-  console.log('GraphVisualization receivedMessages:', receivedMessages);
+  //console.log('GraphVisualization receivedMessages:', receivedMessages);
 
   return (
     <div className="graph-container relative">

@@ -23,7 +23,7 @@ export function useSocket(
     socketRef.current.on('connect', () => {
       setIsSocketConnected(true);
       setSocketStatus('connected');
-      console.log('Socket connected');
+      //console.log('Socket connected');
     });
 
     socketRef.current.on('connect_error', (err) => {
@@ -36,7 +36,7 @@ export function useSocket(
     socketRef.current.on('disconnect', () => {
       setIsSocketConnected(false);
       setSocketStatus('disconnected');
-      console.log('Socket disconnected');
+      //console.log('Socket disconnected');
     });
 
     socketRef.current.on('receive_message', ({ nodeId, message }) => {
