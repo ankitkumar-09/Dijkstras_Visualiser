@@ -28,20 +28,20 @@ function App() {
 
   const [message, setMessage] = useState('');
 
-  const [messageStatus, setMessageStatus] = useState({ text: 'Idle', type: 'info' });//???
+  const [messageStatus, setMessageStatus] = useState({ text: 'Idle', type: 'info' });
 
   const [receivedMessages, setReceivedMessages] = useState([]);
   
-  const dijkstraGeneratorRef = useRef(null);//??
+  const dijkstraGeneratorRef = useRef(null);
 
-  const intervalIdRef = useRef(null);//??
+  const intervalIdRef = useRef(null);
 
   // Log receivedMessages changes
   useEffect(() => {
    // console.log('App.jsx receivedMessages updated:', receivedMessages);
   }, [receivedMessages]);
 
-  // Socket.IO Hook    ///????
+  // Socket.IO Hook    
   const socketRef = useSocket(
     graphData,
     setSocketStatus,
@@ -61,7 +61,7 @@ function App() {
     }
     setStartNode(null);
     setTargetNode(null);
-    reset(false);///???
+    reset(false);
   }, [graphType]);//on change of graph type
 
   // on click buttotn start algorrthim...DAA
@@ -225,8 +225,8 @@ function App() {
           setStartNode={setStartNode}
           targetNode={targetNode}
           setTargetNode={setTargetNode}
-          startDijkstra={startDijkstra}//???button
-          reset={() => reset(true)}//???button
+          startDijkstra={startDijkstra}
+          reset={() => reset(true)}
           playPause={playPause}//button
           step={step}//manual visualize button
           speed={speed}
