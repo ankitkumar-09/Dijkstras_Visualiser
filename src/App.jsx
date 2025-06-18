@@ -3,6 +3,7 @@ import ControlsPanel from './components/ControlsPanel.jsx';
 import GraphVisualization from './components/GraphVisualization.jsx';
 import { dijkstraStepByStep, reconstructPath } from './utils/dijkstra.js';
 import { useSocket, sendMessage } from './utils/socket.js';
+import { huffmanEncode, huffmanDecode, serializeTree } from './utils/huffman.js';
 
 import {nodeRaidus,complexGraph,simpleGraph,complexGraphNodePositions,simpleGraphNodePostions} from './utils/graphData.js';
 
@@ -32,6 +33,15 @@ function App() {
 
   const [receivedMessages, setReceivedMessages] = useState([]);
   
+  const [huffmanConsole, setHuffmanConsole] = useState({
+    input: '',
+    encoded: '',
+    codeMap: {},
+    tree: null,
+    decoded: '',
+    show: false,
+  });
+
   const dijkstraGeneratorRef = useRef(null);
 
   const intervalIdRef = useRef(null);
@@ -212,6 +222,14 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (receivedMessages.length && huffmanConsole.show && huffmanConsole.tree) {
+      const encodedMsg = receivedMessages[0].message;
+      const decoded = huffmanDecode(encodedMsg, huffmanConsole.tree);
+      setHuffmanConsole((prev) => ({ ...prev, decoded }));
+    }
+  }, [receivedMessages]);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-blue-600 text-white p-6 text-center">
@@ -238,9 +256,29 @@ function App() {
           message={message}
           setMessage={setMessage}
           //socket concept check it out later...
-          sendMessage={() =>
-            sendMessage(socketRef, startNode, targetNode, message, finalPath, isSocketConnected, setMessageStatus, setMessage)
-          }
+          sendMessage={() => {
+            // Huffman encode
+            const { encoded, tree, codeMap } = huffmanEncode(message);
+            setHuffmanConsole({
+              input: message,
+              encoded,
+              codeMap,
+              tree: serializeTree(tree),
+              decoded: '',
+              show: true,
+            });
+            // Send encoded message
+            sendMessage(
+              socketRef,
+              startNode,
+              targetNode,
+              encoded,
+              finalPath,
+              isSocketConnected,
+              setMessageStatus,
+              () => setMessage('')
+            );
+          }}
           messageStatus={messageStatus}
           socketStatus={socketStatus}
           isSocketConnected={isSocketConnected}
@@ -261,6 +299,19 @@ function App() {
           receivedMessages={receivedMessages}
           isSocketConnected={isSocketConnected}
         />
+        {huffmanConsole.show && (
+          <div style={{
+            background: '#111', color: '#0f0', padding: '1rem', minHeight: '180px',
+            fontFamily: 'monospace', marginTop: '2rem', borderRadius: '8px'
+          }}>
+            <h3 style={{color:'#fff'}}>Huffman Encoding Console</h3>
+            <div>Original: <span style={{color:'#fff'}}>{huffmanConsole.input}</span></div>
+            <div>Code Map: <span style={{color:'#fff'}}>{JSON.stringify(huffmanConsole.codeMap)}</span></div>
+            <div>Encoded: <span style={{color:'#fff'}}>{huffmanConsole.encoded}</span></div>
+            <div>Decoded: <span style={{color:'#fff'}}>{huffmanConsole.decoded}</span></div>
+            {/* <div>Tree: <pre style={{color:'#fff', fontSize:'0.9em', margin:0}}>{JSON.stringify(huffmanConsole.tree, null, 2)}</pre></div> */}
+          </div>
+        )}
       </main>
     </div>
   );

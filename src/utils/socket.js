@@ -13,6 +13,7 @@ export function useSocket(
   useEffect(() => {
     const SOCKET_SERVER_URL = 'http://localhost:3001';
     setSocketStatus('connecting');
+    //io obj function...
     socketRef.current = io(SOCKET_SERVER_URL, {
       reconnection: true,
       reconnectionAttempts: 5,

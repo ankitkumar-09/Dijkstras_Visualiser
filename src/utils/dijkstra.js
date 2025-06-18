@@ -1,7 +1,7 @@
 import PriorityQueue from './priorityQueue.js';
 
 // Dijkstra Algorithm (Genearator)
-export function* dijkstraStepByStep(graph, startNodeId) { //star marks as genrator
+export function* dijkstraStepByStep(graph, startNodeId) {
   const distances = {}; // intiailize (key,distance)
   const path = {}; //(key,path)
   const visited = new Set(); //to mark vistied or not...
