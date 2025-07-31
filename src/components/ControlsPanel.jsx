@@ -1,115 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function ControlsPanel({
-  startNode,
-  setStartNode,
-  targetNode,
-  setTargetNode,
+  startNode, setStartNode,
+  targetNode, setTargetNode,
   startDijkstra,
-  reset,
-  playPause,
-  step,
-  speed,
-  handleSpeedChange,
-  isRunning,
-  isFinished,
-  dijkstraState,
-  finalPath,
-  message,
-  setMessage,
-  sendMessage,
-  messageStatus,
-  socketStatus,
+  isFinished, finalPath,
+  message, setMessage, sendMessage,
   isSocketConnected,
-  graphData,
-  setGraphType,
+  graphData, setGraphType,
+  graphType
 }) {
-  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(true);
-
-  //check:is all set to send data??
-  useEffect(() => {
-    const canSend = 
-    isFinished //algorithm done
-    && startNode !== null //sender node selected 
-    && targetNode !== null // reciever node selected
-    && finalPath.length > 0 //sender and reciver not be same
-    && isSocketConnected  //socket is connected
-    && message.trim() !== '';//message should not be empty
-
-    // console.log('canSend conditions:', {
-    //   isFinished,
-    //   startNode,
-    //   targetNode,
-    //   finalPathLength: finalPath.length,
-    //   finalPath,
-    //   isSocketConnected,
-    //   message: message.trim(),
-    // });
-
-    setIsSendButtonDisabled(!canSend);
-    
-  }, [isFinished, startNode, targetNode, finalPath, isSocketConnected, message]);
-
-  const getStatusMessage = () => {
-    if (startNode === null) return 'Select a starting node.';
-    if (!dijkstraState) return 'Press Start Dijkstra to run.';
-    if (!isFinished) return getDijkstraPhaseMessage();
-    if (targetNode === null) return 'Select a target node.';
-    if (finalPath.length === 0) return 'No path found to target node.';
-    if (!isSocketConnected) return 'Waiting for socket connection...';
-    if (!message.trim()) return 'Enter a message to send.';
-    return 'Path found. Ready to send message.';
-  };
-
-  const getDijkstraPhaseMessage = () => {
-    if (isRunning) return `Running... (Current Phase: ${dijkstraState?.phase || 'Unknown'})`;
-    switch (dijkstraState?.phase) {
-      case 'init':
-        return 'Initializing Dijkstra...';
-      case 'visiting':
-        return `Visiting Node N${dijkstraState?.currentNode ?? 'unknown'}...`;
-      case 'updating':
-        return getUpdateMessage();
-      case 'done':
-        return 'Dijkstra Finished.';
-      default:
-        return 'Dijkstra Running...';
-    }
-  };
-
-  const getUpdateMessage = () => {
-    const { updatedNode, exploringEdge, distances, currentNode } = dijkstraState || {};
-    if (updatedNode !== undefined) {
-      const currentDist = distances?.[updatedNode] ?? Infinity;
-      return `Updated distance to Node N${updatedNode} (New: ${currentDist === Infinity ? '∞' : currentDist})`;
-    }
-    const neighbor = exploringEdge?.from === currentNode ? exploringEdge.to : exploringEdge?.from;
-    return `Checking path to Node N${neighbor ?? 'unknown'} via Node N${currentNode ?? 'unknown'}...`;
-  };
-
-  const getResultDistance = () => {
-    if (isFinished && targetNode !== null && dijkstraState?.distances) {
-      const dist = dijkstraState.distances[targetNode];
-      return dist === Infinity ? 'Unreachable' : dist;
-    }
-    return '-';
-  };
+  const canSendMessage = (
+    isFinished &&
+    startNode !== null &&
+    targetNode !== null &&
+    finalPath.length > 0 &&
+    isSocketConnected
+  );
 
   return (
     <div className="controls-panel">
-      <h2>Controls Panel</h2>
+      <h2>Path Controls</h2>
 
       <div className="control-group">
-        <label htmlFor="graph-type-select">Graph Type:</label>
+        <label>Graph Type:</label>
         <select
-          id="graph-type-select"
-          onChange={(e) => {
-            console.log(e.target.value);
-            setGraphType(e.target.value);
-            setStartNode(null);
-            setTargetNode(null);
-          }}
-          disabled={isRunning || dijkstraState} //disable selection of node when algorithm is running...
+          value={graphType}
+          onChange={(e) => setGraphType(e.target.value)}
+          className="graph-select"
         >
           <option value="simple">Simple Graph</option>
           <option value="complex">Complex Graph</option>
@@ -117,134 +35,61 @@ function ControlsPanel({
       </div>
 
       <div className="control-group">
-        <label htmlFor="start-node-select">Start Node (Sender):</label>
+        <label>Start Node (Sender):</label>
         <select
-          id="start-node-select"
-          value={startNode ?? ''}
-          onChange={(e) =>{ 
-            //console.log(e.target.value);
-            setStartNode(parseInt(e.target.value) || null)
-          }
-          }
-          disabled={dijkstraState && !isFinished}///????
+          value={startNode || ''}
+          onChange={(e) => setStartNode(Number(e.target.value))}
         >
-          <option value="" disabled>
-            Select Start Node
-          </option>
-          {graphData.nodes.map((node) => (
-            <option key={node.id} value={node.id}>
-              {node.label}
-            </option>
+          <option value="" disabled>Select Sender</option>
+          {graphData.nodes.map(node => (
+            <option key={node.id} value={node.id}>{node.label}</option>
           ))}
         </select>
       </div>
 
       <div className="control-group">
-        <label htmlFor="target-node-select">Target Node (Receiver):</label>
+        <label>Target Node (Receiver):</label>
         <select
-          id="target-node-select"
-          value={targetNode ?? ''}
-          onChange={(e) => setTargetNode(parseInt(e.target.value) || null)}
-          disabled={dijkstraState || startNode === null}
+          value={targetNode || ''}
+          onChange={(e) => setTargetNode(Number(e.target.value))}
+          disabled={!startNode}
         >
-          <option value="" disabled>
-            Select Target Node
-          </option>
+          <option value="" disabled>Select Receiver</option>
           {graphData.nodes
-            .filter((node) => node.id !== startNode)
-            .map((node) => (
-              <option key={node.id} value={node.id}>
-                {node.label}
-              </option>
+            .filter(node => node.id !== startNode)
+            .map(node => (
+              <option key={node.id} value={node.id}>{node.label}</option>
             ))}
         </select>
       </div>
 
-      <div className="control-buttons">
-        <button
-          onClick={startDijkstra}
-          disabled={startNode === null || dijkstraState}
-          className="btn btn-primary"
-        >
-          Start Dijkstra
-        </button>
-        <button
-          onClick={playPause}
-          disabled={!dijkstraState || isFinished}
-          className={`btn btn-secondary ${isRunning ? 'playing' : ''}`}
-        >
-          {isRunning ? 'Pause' : 'Play'}
-        </button>
-        <button
-          onClick={step}
-          disabled={!dijkstraState || isRunning || isFinished}
-          className="btn btn-secondary"
-        >
-          Step
-        </button>
-        <button onClick={reset} className="btn btn-outline">
-          Reset
-        </button>
-      </div>
+      <button 
+        onClick={startDijkstra} 
+        disabled={!startNode}
+        className="btn-primary"
+      >
+        Find Shortest Path
+      </button>
 
-      <div className="control-group">
-        <label htmlFor="speed-slider">Animation Speed:</label>
-        <input
-          type="range"
-          id="speed-slider"
-          min="100"
-          max="1000"
-          value={1100 - speed}
-          onChange={(e) => handleSpeedChange(parseInt(e.target.value))}
-        />
-        <span>{1100-speed}ms</span>
-      </div>
-
-      <div className="status-info">
-        <h3>Algorithm Status</h3>
-        <p>{getStatusMessage()}</p>
-      </div>
-
-      <div className="results-info">
-        <h3>Result</h3>
-        <p>
-          Shortest Distance: <strong>{getResultDistance()}</strong>
-        </p>
-      </div>
-
-      <div className="messaging-section">
-        <h3>Send Message</h3>
-        <input
-          type="text"
-          id="message-input"
-          placeholder="Enter message..."
-          value={message}
-          onChange={(e) => {
-            console.log('Input value:', e.target.value);
-            setMessage(e.target.value);
-          }}
-        />
-        <button
-          id="send-message-button"
-          onClick={() => {
-            console.log('Send Message button clicked');
-            sendMessage();
-          }}
-          className="btn btn-accent"
-          disabled={isSendButtonDisabled}
-        >
-          Send Message
-        </button>
-        <div className="message-status-area">
-          <p>
-            Status: <span>{messageStatus.text}</span>
-          </p>
+      {isFinished && (
+        <div className="messaging-section">
+          <h3>Send Message</h3>
+          <input
+            type="text"
+            placeholder="Type your message..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="message-input"
+          />
+          <button
+            onClick={sendMessage}
+            disabled={!canSendMessage}
+            className="btn-send"
+          >
+            Send Message
+          </button>
         </div>
-      </div>
-
-      <div className="connection-status">
-        Socket Status: <span className={`status-${socketStatus}`}>{socketStatus}</span>
-      </div>
+      )}
     </div>
   );
 }

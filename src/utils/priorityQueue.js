@@ -47,8 +47,14 @@ export default class PriorityQueue {
     const left = 2 * index + 1;
     const right = 2 * index + 2;
     let smallest = index;
-    if (left < this.heap.length && this.heap[left].distance < this.heap[smallest].distance) smallest = left;
-    if (right < this.heap.length && this.heap[right].distance < this.heap[smallest].distance) smallest = right;
+    if (left < this.heap.length && this.heap[left].distance < this.heap[smallest].distance)
+      {
+         smallest = left;
+      }
+    if (right < this.heap.length && this.heap[right].distance < this.heap[smallest].distance)
+      {
+      smallest = right;
+      }
     if (smallest !== index) {
       [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
       this.sinkDown(smallest);

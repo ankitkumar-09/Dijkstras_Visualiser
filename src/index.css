@@ -1,38 +1,25 @@
 /* General Styles */
-:root {
-    /* Updated Color Palette (More Vibrant) */
-    --background: hwb(118 7% 36% / 0.507); /* Very Light Gray */
-    --foreground: hsl(0, 0%, 0%); /* Text Colours */
-    --card-bg: hsl(0, 0%, 100%);/* background */
-    --border-color: hsl(0, 0%, 0%); /* Border colour */
-    --primary-fg: hsl(0, 86%, 37%); /* White */
-    --secondary-fg: hsl(222, 59%, 54%); /* Darker Slate Blue */
-    --accent-color: hsl(115, 97%, 34%); /* Inside Color of nodes */
-    --exploring-color: hsl(45 100% 60%); /* Bright Yellow */
-    --visited-color: hsl(210 20% 85%); /* Medium Light Gray */
-    --path-color: hsl(160 70% 45%); /* Teal/Green for Path */
-    --node-stroke-color: hsl(210 15% 75%); /* Medium Gray Border */
-    --edge-stroke-color: hsl(210 15% 80%); /* Default Edge Color */
-    --message-send-color: hsl(200, 82%, 55%); /* Bright Blue for sending */
-    --message-receive-color: hsl(160 70% 45%); /* Teal/Green for receiving */
-    --error-color: hsl(0 70% 55%); /* Red for errors */
-    --status-connected: hsl(130, 60%, 45%); /* Green for connected */
-    --status-disconnected: hsl(0, 60%, 50%); /* Red for disconnected */
-    --status-connecting: hsl(0, 100%, 33%); /* Orange for connecting */
+ :root {
+
+    --card-bg: hsl(0, 20%, 38%);
+   
+    --exploring-color: hsl(45 100% 60%);
+    --visited-color: hsl(0, 0%, 99%); 
+    --path-color: hsl(153, 97%, 38%); 
+    --edge-stroke-color: hsl(0, 0%, 0%); 
+    --message-receive-color: hsl(160 70% 45%); 
+    --status-disconnected: hsl(0, 60%, 50%); 
+    --status-connecting: hsl(0, 28%, 85%); 
 
     --radius: 0.5rem;
-    /* --shadow-lg: 0 12px 24px rgb(207, 1, 1), 0 8px 8px rgba(110, 238, 25, 0.08); */
-}
+} */
 
-*{
-    margin: 0;
-    padding: 0;
-}
+
+
 body{
-    background-color: black;
+    background-color: rgb(171, 25, 25);
 }
 header {
-    /* background-color: var(--card-bg); */
     background-color: cadetblue;
     padding: 1rem 2rem;
     border-bottom: 1px solid var(--border-color);
@@ -40,18 +27,7 @@ header {
     text-align: center;
 }
 
-header h1 {
-    margin: 0 0 0.5rem 0;
-    color: var(--primary-color);
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
 
-header p {
-    margin: 0;
-    color: var(--muted-fg);
-    font-size: 1rem;
-}
 
 
 .container{
@@ -70,15 +46,14 @@ header p {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: .25rem;
+    gap: 1rem;
 }
 
-@media (min-width: 768px) {
     .controls-panel {
         width: 666600px;
-         min-width: 280px; /*Slightly narrower to ensure graph space */
+         min-width: 280px; 
     }
-}
+
 
 .controls-panel h2 {
     text-align: center;
@@ -89,236 +64,53 @@ header p {
 }
 
 .control-group label {
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 800;
+    font-size: 1.4rem;
+    display:flex;
+    flex-direction: column;
 }
 
 .control-group select,
 .control-group input[type="range"],
 .control-group input[type="text"] {
-    padding: 0.5rem;
+    padding: 1rem;
     margin-top:.5rem;
     border: 2px solid black;
     border-radius: .5rem;
-    font-size: .9rem;
-    background-color: rgba(31, 160, 31, 0.589);
+    font-size: 1.4rem;
+    background-color: rgba(216, 119, 8, 0.589);
     width: 100%;
     box-sizing: border-box;
 }
-
-
-/* Buttons */
-.control-buttons {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap:wrap;
-    margin-top:1rem;
-    border-top: 2px solid black;
-    padding-top: 1rem;
-    
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: left;
-    gap: 0.5rem;
-    color:black;
-    padding: 0.6rem 1.1rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: black 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-    white-space: nowrap;
-    min-height: 38px;
-}
-
-.btn svg {
-    pointer-events: none;
-}
-/* 
-.btn:active:not(:disabled) {
-    transform: translateY(1px) scale(0.98);
-} */
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: red !important;
-    /* color: blue !important; */
-    border-color: black !important;
-}
-
-.btn:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px green, 0 0 0 4px yellow;
-}
-
 .btn-primary {
-    background-color:rgb(235, 86, 86);
+    background-color:rgb(77, 205, 55);
     font-weight: 600;
-}
-.btn-primary:hover:not(:disabled) {
-    background-color: red;
-}
-
-.btn-secondary {
-    background-color: white;
-    font-weight: 600;
-}
-.btn-secondary:hover:not(:disabled) {
-    background-color: rgb(160, 212, 160);
-}
-
-.btn-outline {
-    background-color: powderblue;
-    font-weight: 600;
-    border: 2px solid black;
-}
-.btn-outline:hover:not(:disabled) {
-    background-color: yellowgreen;
-    color: red;
-    border-color: black;
-}
-
-.btn-accent {
-    background-color: rosybrown;
-}
-.btn-accent:hover:not(:disabled) {
-    background-color: peachpuff;
-}
-
-/* Specific Button icons */
-.hidden {
-    display: none;
-}
-#play-pause-button .pause-icon { display: none; }
-#play-pause-button.playing .play-icon { display: none; }
-#play-pause-button.playing .pause-icon { display: inline-block; }
-
-/* Slider */
-input[type="range"] {
-    cursor: pointer; 
-    appearance: none;
-    height:0.5px;
-    background: white;
-    border-radius: 1px;
-    outline: none;
-}
-input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    background:black;
-    border-radius: 100%;
-    padding: .6rem;
-    border: 1px solid green;
-    
-}
-input[type="range"]:hover::-webkit-slider-thumb {
-     background:black;
-}
-input[type="range"]:active::-webkit-slider-thumb {
-     transform: scale(1.1);
-}
-
-
-/* Status & Results */
-.status-info, .results-info, .messaging-section {
-    padding-top: 1rem;
-    border-top: 2px solid black;
-}
-
-.status-info h3, .results-info h3, .messaging-section h3 {
-    margin: 0 0 0.75rem 0;
     font-size: 1.2rem;
-    font-weight: 600;
 }
 
-.status-info p, .results-info p {
-    font-size: 1rem;
-    margin: 0;
-    min-height: 1.5em;
-}
-
-/* Messaging Section Styles */
 .messaging-section {
     display: flex;
     flex-direction: column;
-    gap:.5rem;
+    gap:1rem;
+    padding: 1rem;
+    background-color: rgb(28, 166, 201);
 }
 
-#message-input{
-    padding: 0.5rem;
-    border-radius: .5rem;
-}
-
-
-#send-message-button {
-    display: flex;
-    align-self: center;
-    margin-top: 0.2rem;
-    border: 2px solid rgb(145, 145, 194); /* Change color and thickness as needed */
-    border-radius: 4px; /* Optional: Adds rounded corners */
-}
-
-
-.message-status-area p {
-    font-size: 0.9rem;
-    margin: 0.5rem 0 0 0;
-}
-#message-status {
-    font-weight: 500;
-}
-#message-status.sending { color: skyblue; }
-#message-status.delivered { color:hsl(160 70% 45%); }
-#message-status.failed { color:  hsl(0 70% 55%); }
-
-/* Connection Status */
-.connection-status {
-    font-size: 0.8rem;
-    /* color: var(--muted-fg); */
-    padding-top: 1rem;
-    border-top: 2px dashed black;
-    text-align: center;
-}
-#socket-status {
-    font-weight: bold;
-    padding: 0.1rem 0.4rem;
-    border-radius: 4px;
-    color: white;
-}
-#socket-status.status-connected { background-color:hsl(130, 60%, 45%); }
-#socket-status.status-disconnected { background-color:  hsl(0, 60%, 50%); }
-#socket-status.status-connecting { background-color:  hsl(0, 100%, 33%); }
-
-/* Graph Visualization Area */
 .graph-container {
-    flex-grow: 1;
+    flex-grow: 3;
     background-color: var(--card-bg);
     border-radius: var(--radius);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     box-shadow: var(--shadow);
     overflow: hidden;
     position: relative;
-    height: 100%; /* Fill container height */
-    display: flex; /* Center SVG if needed */
+    height: 100%; 
+    display: flex; 
 }
 
-#graph-svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-/* SVG Element Styles */
-
-/* Edges */
 .edge-line {
     stroke: var(--edge-stroke-color);
-    stroke-width: 2.5;
-    fill: none;
+    stroke-width: 3;
     transition: stroke 0.2s ease-in-out, stroke-width 0.2s ease-in-out;
 }
 
@@ -333,8 +125,8 @@ input[type="range"]:active::-webkit-slider-thumb {
 }
 
 .edge-weight {
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 600;
     fill: var(--muted-fg);
     text-anchor: middle;
     alignment-baseline: middle;
@@ -358,11 +150,7 @@ input[type="range"]:active::-webkit-slider-thumb {
     font-weight: bold;
 }
 
-/* Nodes */
-.node-group {
-    cursor: pointer;
-    transition: transform 0.15s ease-in-out;
-}
+
 
 .node-group:hover:not(.current):not(.path) .node-circle {
     transform: scale(1.08);
@@ -413,8 +201,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 }
 
 .node-circle.selected {
-    /* Style handled by the selection ring */
-    height: 0px;  /*remove it*/
+    height: 0px; 
 } */
 
 .node-circle.messaging-sender {
@@ -451,7 +238,6 @@ input[type="range"]:active::-webkit-slider-thumb {
     fill: var(--foreground);
 }
 
-/* Text colors based on node state */
 .node-group.current .node-distance,
 .node-group.path .node-distance,
 .node-group.messaging-sender .node-distance,
@@ -463,7 +249,6 @@ input[type="range"]:active::-webkit-slider-thumb {
      fill: rgb(19, 13, 181);
 }
 
-/* Outer ring for selection/focus */
 .node-selection-ring {
     fill: none;
     stroke: hsla(var(--ring-color), 0.5);
@@ -475,7 +260,7 @@ input[type="range"]:active::-webkit-slider-thumb {
     stroke-width: 3;
 }
 
-/* Message Popup Styles */
+
 .message-popup {
     opacity: 0;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -489,8 +274,8 @@ input[type="range"]:active::-webkit-slider-thumb {
 }
 
 .message-popup-rect {
-    fill: hsla(var(--card-bg), 0.9);
-    stroke: var(--message-receive-color);
+    fill: white; 
+    stroke: green; 
     stroke-width: 1.5;
     rx: 5;
     filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15));
@@ -499,16 +284,11 @@ input[type="range"]:active::-webkit-slider-thumb {
 .message-popup-text {
     font-size: 12px;
     font-weight: 500;
-    fill: var(--foreground);
+    fill: black;
     text-anchor: middle;
-    alignment-baseline: middle;
+    dominant-baseline: middle; 
 }
 
-
-
-
-
-/* Animations */
 @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.7; transform: scale(1.05); }
@@ -576,7 +356,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 .message-popup {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
-  z-index: 1000; /* Ensure popup is above other SVG elements */
+  z-index: 1000; 
 }
 
 .message-popup.visible {
@@ -589,5 +369,5 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 .message-popup-text {
   font-family: Arial, sans-serif;
-  font-weight: bold; /* Improve visibility */
+  font-weight: bold; 
 }

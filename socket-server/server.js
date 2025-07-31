@@ -6,37 +6,36 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST'],
-  },
+    origin: 'http://localhost:3000', 
+    methods: ['GET', 'POST']       
+  }
 });
 
 io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id);
+  console.log('New user connected:', socket.id);
 
-  socket.on('send_message', (payload, callback) => {
-    console.log('Received send_message:', payload);
-    const { senderId, receiverId, message, path } = payload;
-
-    if (!senderId || !receiverId || !message || !path) {
-      console.error('Invalid payload:', payload);
-      callback({ success: false, error: 'Missing required fields' });
+  socket.on('send_message', (data, respond) => {
+    console.log('Got message:', data);
+    
+    if (!data.senderId || !data.receiverId || !data.message || !data.path) {
+      console.log('Message missing info');
+      respond({ ok: false, error: 'Missing data' });
       return;
     }
 
-    // Simulate message delivery to the receiver
-    console.log(`Message from Node ${senderId} to Node ${receiverId}:`, { message, path });
-    socket.emit('receive_message', { nodeId: receiverId, message });
+    socket.emit('receive_message', {
+      from: data.senderId,
+      message: data.message
+    });
 
-    callback({ success: true });
+    respond({ ok: true });
   });
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
+    console.log('User disconnected:', socket.id);
   });
 });
-
-const PORT = 3001;
-server.listen(PORT, () => {
-  console.log(`Socket.IO server running on http://localhost:${PORT}`);
+const port = 3001;
+server.listen(port, () => {
+  console.log(`Chat server running on port ${port}`);
 });
