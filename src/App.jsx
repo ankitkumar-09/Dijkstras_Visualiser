@@ -2,46 +2,39 @@ import { useState, useEffect, useRef } from 'react';
 import ControlsPanel from './components/ControlsPanel.jsx';
 import GraphVisualization from './components/GraphVisualization.jsx';
 import { dijkstraStepByStep, reconstructPath } from './utils/dijkstra.js';
-import { useSocket, sendMessage } from './utils/socket.js';
-
-import {nodeRaidus,complexGraph,simpleGraph,complexGraphNodePositions,simpleGraphNodePostions} from './utils/graphData.js';
+import { useSocket, sendMessage as sendMessageFn } from './utils/socket.js';
+import {
+  nodeRaidus,
+  complexGraph,
+  simpleGraph,
+  complexGraphNodePositions,
+  simpleGraphNodePostions,
+} from './utils/graphData.js';
 
 function App() {
-  //graph intilization setup...
-  const [graphType, setGraphType] = useState('simple'); // choose graph which have to visualize...default is simple
+  const [graphType, setGraphType] = useState('simple');
   const [graphData, setGraphData] = useState(simpleGraph);
   const [nodePositions, setNodePositions] = useState(simpleGraphNodePostions);
-  const [startNode, setStartNode] = useState(null);//choose source node
-  const [targetNode, setTargetNode] = useState(null);//choose destination node
+  const [startNode, setStartNode] = useState(null);
+  const [targetNode, setTargetNode] = useState(null);
 
   const [dijkstraState, setDijkstraState] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
 
-  const [speed, setSpeed] = useState(500);//visualization speed
-  
-  const [finalPath, setFinalPath] = useState([]);//store the final path to highlight at last...
+  const [speed, setSpeed] = useState(500);
+  const [finalPath, setFinalPath] = useState([]);
 
-  const [socketStatus, setSocketStatus] = useState('offline');//connectivity with socket...
-
-  const [isSocketConnected, setIsSocketConnected] = useState(false);//intitally socket is not connected to send the message...
+  const [socketStatus, setSocketStatus] = useState('offline');
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
 
   const [message, setMessage] = useState('');
-
-  const [messageStatus, setMessageStatus] = useState({ text: 'Idle', type: 'info' });//???
-
+  const [messageStatus, setMessageStatus] = useState({ text: 'Idle', type: 'info' });
   const [receivedMessages, setReceivedMessages] = useState([]);
-  
-  const dijkstraGeneratorRef = useRef(null);//??
 
-  const intervalIdRef = useRef(null);//??
+  const dijkstraGeneratorRef = useRef(null);
+  const intervalIdRef = useRef(null);
 
-  // Log receivedMessages changes
-  useEffect(() => {
-   // console.log('App.jsx receivedMessages updated:', receivedMessages);
-  }, [receivedMessages]);
-
-  // Socket.IO Hook    ///????
   const socketRef = useSocket(
     graphData,
     setSocketStatus,
@@ -50,7 +43,6 @@ function App() {
     setReceivedMessages
   );
 
-  //render the page when graph type is changed from simple to complex or vice versa...
   useEffect(() => {
     if (graphType === 'simple') {
       setGraphData(simpleGraph);
@@ -61,24 +53,23 @@ function App() {
     }
     setStartNode(null);
     setTargetNode(null);
-    reset(false);///???
-  }, [graphType]);//on change of graph type
+    reset(false);
+  }, [graphType]);
 
-  // on click buttotn start algorrthim...DAA
   const startDijkstra = () => {
     if (startNode === null) {
       alert('Please select a start node first.');
       return;
     }
-    reset(false);///??what this will do
-    dijkstraGeneratorRef.current = dijkstraStepByStep(graphData, startNode); //update dijkstra  genrator with return value of function
+    reset(false);
+    dijkstraGeneratorRef.current = dijkstraStepByStep(graphData, startNode);
     setIsRunning(true);
     setIsFinished(false);
     setMessageStatus({ text: 'Dijkstra running...', type: 'info' });
     nextStep();
     startAutoPlay();
   };
-//reset button... rnder page to reset all the data...
+
   const reset = (resetSelections = true) => {
     stopAutoPlay();
     setIsRunning(false);
@@ -94,15 +85,12 @@ function App() {
     setMessageStatus({ text: 'Idle', type: 'info' });
     setReceivedMessages([]);
   };
-//play pause to button to stop algortihm at some moment...
+
   const playPause = () => {
     if (!dijkstraGeneratorRef.current || isFinished) return;
     setIsRunning((prev) => {
-      if (!prev) {
-        startAutoPlay();
-      } else {
-        stopAutoPlay();
-      }
+      if (!prev) startAutoPlay();
+      else stopAutoPlay();
       return !prev;
     });
   };
@@ -128,7 +116,6 @@ function App() {
         setIsRunning(false);
         if (startNode !== null && targetNode !== null && dijkstraState?.path) {
           const path = reconstructPath(dijkstraState.path, startNode, targetNode);
-          console.log('Setting finalPath after Dijkstra complete:', path);
           setFinalPath(path);
         } else {
           setFinalPath([]);
@@ -138,18 +125,16 @@ function App() {
     }
 
     const result = dijkstraGeneratorRef.current.next();
-    if (result.value) {
-      setDijkstraState(result.value);
-    }
+    if (result.value) setDijkstraState(result.value);
 
     if (result.done) {
       setIsFinished(true);
       setIsRunning(false);
       stopAutoPlay();
       if (result.value) setDijkstraState(result.value);
+
       if (startNode !== null && targetNode !== null && result.value?.path) {
         const path = reconstructPath(result.value.path, startNode, targetNode);
-        console.log('Setting finalPath when done:', path);
         setFinalPath(path);
         if (path.length === 0 && startNode !== targetNode) {
           setMessageStatus({ text: 'Target unreachable', type: 'failed' });
@@ -158,7 +143,10 @@ function App() {
         }
       } else {
         setFinalPath([]);
-        setMessageStatus({ text: targetNode === null ? 'Select target node' : 'Finished', type: 'info' });
+        setMessageStatus({
+          text: targetNode === null ? 'Select target node' : 'Finished',
+          type: 'info',
+        });
       }
     }
   };
@@ -178,10 +166,16 @@ function App() {
   };
 
   const handleNodeClick = (nodeId) => {
-    console.log('handleNodeClick:', { nodeId, startNode, targetNode, isRunning, isFinished });
     if (isRunning) {
       setMessageStatus({ text: 'Pause or wait to select nodes.', type: 'failed' });
-      setTimeout(() => setMessageStatus({ text: dijkstraState ? 'Dijkstra running...' : 'Idle', type: 'info' }), 1500);
+      setTimeout(
+        () =>
+          setMessageStatus({
+            text: dijkstraState ? 'Dijkstra running...' : 'Idle',
+            type: 'info',
+          }),
+        1500
+      );
       return;
     }
 
@@ -192,24 +186,29 @@ function App() {
       setTargetNode(nodeId);
       if (isFinished && dijkstraState?.path && startNode !== null) {
         const path = reconstructPath(dijkstraState.path, startNode, nodeId);
-        console.log('Setting finalPath on target node select:', path);
         setFinalPath(path);
       }
-    } else if (nodeId === startNode) {
+    } else if (nodeId === startNode || nodeId === targetNode) {
       setTargetNode(null);
-      if (isFinished && targetNode !== null) {
-        setFinalPath([]);
-      }
-    } else if (nodeId === targetNode) {
-      setTargetNode(null);
-      if (isFinished) {
-        setFinalPath([]);
-      }
+      if (isFinished) setFinalPath([]);
     } else {
       setStartNode(nodeId);
       setTargetNode(null);
       if (isFinished || dijkstraState) reset(false);
     }
+  };
+
+  const handleSendMessage = () => {
+    sendMessageFn(
+      socketRef,
+      startNode,
+      targetNode,
+      message,
+      finalPath,
+      isSocketConnected,
+      setMessageStatus,
+      setMessage
+    );
   };
 
   return (
@@ -220,27 +219,23 @@ function App() {
       </header>
       <main className="container mx-auto p-4">
         <ControlsPanel
-          // passing props for controls panel...
           startNode={startNode}
           setStartNode={setStartNode}
           targetNode={targetNode}
           setTargetNode={setTargetNode}
-          startDijkstra={startDijkstra}//???button
-          reset={() => reset(true)}//???button
-          playPause={playPause}//button
-          step={step}//manual visualize button
+          startDijkstra={startDijkstra}
+          reset={() => reset(true)}
+          playPause={playPause}
+          step={step}
           speed={speed}
           handleSpeedChange={handleSpeedChange}
           isRunning={isRunning}
           isFinished={isFinished}
           dijkstraState={dijkstraState}
-          finalPath={finalPath} //store the path
+          finalPath={finalPath}
           message={message}
           setMessage={setMessage}
-          //socket concept check it out later...
-          sendMessage={() =>
-            sendMessage(socketRef, startNode, targetNode, message, finalPath, isSocketConnected, setMessageStatus, setMessage)
-          }
+          sendMessage={handleSendMessage}
           messageStatus={messageStatus}
           socketStatus={socketStatus}
           isSocketConnected={isSocketConnected}
