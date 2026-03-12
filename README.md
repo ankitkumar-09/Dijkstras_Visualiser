@@ -2,7 +2,7 @@
 # PathFinder: Interactive Graph Visualization for Efficient Pathfinding
 
 This project is an interactive visualizer for Dijkstra's algorithm, built with React and Vite. It allows users to visualize the shortest path between nodes in a graph and simulate message passing between nodes using a real-time Socket.IO server.
-
+Live URL(Prototype): https://dijkstras-visualiser.vercel.app/
 ---
 
 ## Table of Contents
